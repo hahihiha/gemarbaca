@@ -1,8 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../../data/model/response_buku.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -161,7 +164,36 @@ class HomeView extends GetView<HomeController> {
             ),
           )),
           SizedBox(height: 30),
-          Container(),
+          controller.obx(
+                  (state) => ListView.separated(
+                itemCount: state!.length,
+                itemBuilder: (context, index) {
+                  DataBuku dataBuku = state[index];
+                  return ListTile(
+                    title: Text("${dataBuku.judul}"),
+                    subtitle: Text(
+                        "Penulis ${dataBuku.penulis}\n${dataBuku.penerbit} - ${dataBuku.tahunTerbit}"),
+                    trailing: ElevatedButton(
+                      onPressed: () => Get.toNamed(Routes.ADD_PEMINJAMAN,
+                          parameters: {
+                            'id': (dataBuku.id ?? 0).toString(),
+                            'judul': dataBuku.judul ?? '-'
+                          }),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF0CBD63),
+                      ),
+                      child: Text(
+                        "Pinjam",
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => Divider(),
+              ),
+              onLoading: Center(child: CupertinoActivityIndicator())),
         ],
       ),
     );
