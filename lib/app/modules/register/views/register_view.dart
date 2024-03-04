@@ -1,83 +1,79 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:animate_do/animate_do.dart';
 
-import 'loginpage.dart';
+import 'package:get/get.dart';
 
-class RegisterPage extends StatefulWidget {
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
+import '../../../routes/app_pages.dart';
+import '../controllers/register_controller.dart';
 
-class _RegisterPageState extends State<RegisterPage> {
-  bool _obscureText = true;
-
+class RegisterView extends GetView<RegisterController> {
+  const RegisterView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Container(
           child: Column(
             children: <Widget>[
-            Container(
-            height: 400,
-            decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/image/background.png'),
-                    fit: BoxFit.fill
-                )
-            ),
-            child: Stack(
-              children: <Widget>[
-                Positioned(
-                  left: 30,
-                  width: 80,
-                  height: 200,
-                  child: FadeInUp(duration: const Duration(seconds: 1), child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/image/light-1.png')
-                        )
-                    ),
-                  )),
+              Container(
+                height: 400,
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage('assets/image/background.png'),
+                        fit: BoxFit.fill
+                    )
                 ),
-                Positioned(
-                  left: 140,
-                  width: 80,
-                  height: 150,
-                  child: FadeInUp(duration: const Duration(milliseconds: 1200), child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/image/light-2.png')
-                        )
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      left: 30,
+                      width: 80,
+                      height: 200,
+                      child: FadeInUp(duration: const Duration(seconds: 1), child: Container(
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/image/light-1.png')
+                            )
+                        ),
+                      )),
                     ),
-                  )),
+                    Positioned(
+                      left: 140,
+                      width: 80,
+                      height: 150,
+                      child: FadeInUp(duration: const Duration(milliseconds: 1200), child: Container(
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/image/light-2.png')
+                            )
+                        ),
+                      )),
+                    ),
+                    Positioned(
+                      right: 40,
+                      top: 40,
+                      width: 80,
+                      height: 150,
+                      child: FadeInUp(duration: const Duration(milliseconds: 1300), child: Container(
+                        decoration: const BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage('assets/image/clock.png')
+                            )
+                        ),
+                      )),
+                    ),
+                    Positioned(
+                      child: FadeInUp(duration: const Duration(milliseconds: 1600), child: Container(
+                        margin: const EdgeInsets.only(top: 50),
+                        child: const Center(
+                          child: Text("Registration", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
+                        ),
+                      )),
+                    )
+                  ],
                 ),
-                Positioned(
-                  right: 40,
-                  top: 40,
-                  width: 80,
-                  height: 150,
-                  child: FadeInUp(duration: const Duration(milliseconds: 1300), child: Container(
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/image/clock.png')
-                        )
-                    ),
-                  )),
-                ),
-                Positioned(
-                  child: FadeInUp(duration: const Duration(milliseconds: 1600), child: Container(
-                    margin: const EdgeInsets.only(top: 50),
-                    child: const Center(
-                      child: Text("Registration", style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),),
-                    ),
-                  )),
-                )
-              ],
-            ),
-            ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Column(
@@ -105,10 +101,11 @@ class _RegisterPageState extends State<RegisterPage> {
                               decoration: const BoxDecoration(
                                 border: Border(bottom: BorderSide(color:  Color(0xFF0CBD63))),
                               ),
-                              child: TextField(
+                              child: TextFormField(
+                                controller: controller.namaController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: "Username",
+                                  hintText: "Nama",
                                   hintStyle: TextStyle(color: Colors.grey[700]),
                                 ),
                               ),
@@ -118,35 +115,53 @@ class _RegisterPageState extends State<RegisterPage> {
                               decoration: const BoxDecoration(
                                 border: Border(bottom: BorderSide(color:  Color(0xFF0CBD63))),
                               ),
-                              child: TextField(
+                              child: TextFormField(
+                                controller: controller.usernameController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: "Email",
+                                  hintText: "Username",
                                   hintStyle: TextStyle(color: Colors.grey[700]),
                                 ),
-                              ),
+                              )
                             ),
                             Container(
                               padding: const EdgeInsets.all(8.0),
-                              child: TextField(
-                                obscureText: _obscureText,
+                              decoration: const BoxDecoration(
+                                border: Border(bottom: BorderSide(color:  Color(0xFF0CBD63))),
+                              ),
+                              child: TextFormField(
+                                controller: controller.notelpController,
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: "password",
+                                  hintText: "No Telepon",
                                   hintStyle: TextStyle(color: Colors.grey[700]),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _obscureText ? Icons.visibility : Icons.visibility_off,
-                                      color: Colors.grey,
-                                    ),
-                                    onPressed: () {
-                                      setState(() {
-                                        _obscureText = !_obscureText;
-                                      });
-                                    },
-                                  ),
                                 ),
+                              )
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: const BoxDecoration(
+                                border: Border(bottom: BorderSide(color:  Color(0xFF0CBD63))),
                               ),
+                              child: TextFormField(
+                                controller: controller.alamatController,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Alamat",
+                                  hintStyle: TextStyle(color: Colors.grey[700]),
+                                ),
+                              )
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                controller: controller.passwordController,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: "Password",
+                                  hintStyle: TextStyle(color: Colors.grey[700]),
+                                ),
+                              )
                             ),
                           ],
                         ),
@@ -157,10 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       duration: const Duration(milliseconds: 1900),
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const LoginPage()),
-                          );
+                          controller.addacount();
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -211,15 +223,11 @@ class _RegisterPageState extends State<RegisterPage> {
                             TextSpan(
                               text: 'Login!',
                               style: const TextStyle(
-                                color: Color(0xFF0CBD63)
+                                  color: Color(0xFF0CBD63)
                               ),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
-                                  // Navigasi ke halaman login
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                                  );
+                                  Get.toNamed(Routes.LOGIN);
                                 },
                             ),
                           ],

@@ -1,27 +1,83 @@
-import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key});
+import '../controllers/home_controller.dart';
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final myitems = [
-    Image.asset('assets/image/gambar01.jpg'),
-    Image.asset('assets/image/gambar01.jpg'),
-    Image.asset('assets/image/gambar01.jpg'),
-    Image.asset('assets/image/gambar01.jpg'),
-    Image.asset('assets/image/gambar01.jpg'),
-    Image.asset('assets/image/gambar01.jpg'),
-  ];
-
-  int myCurrentIndex = 0;
+class HomeView extends GetView<HomeController> {
+  const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final myitems = [
+      Container(
+        margin: EdgeInsets.all(5),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            'assets/image/gambar01.jpg',
+            fit: BoxFit.cover,
+            width: 1000.0,
+          ),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.all(5),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            'assets/image/gambar01.jpg',
+            fit: BoxFit.cover,
+            width: 1000.0,
+          ),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.all(5),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            'assets/image/gambar01.jpg',
+            fit: BoxFit.cover,
+            width: 1000.0,
+          ),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.all(5),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            'assets/image/gambar01.jpg',
+            fit: BoxFit.cover,
+            width: 1000.0,
+          ),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.all(5),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            'assets/image/gambar01.jpg',
+            fit: BoxFit.cover,
+            width: 1000.0,
+          ),
+        ),
+      ),
+      Container(
+        margin: EdgeInsets.all(5),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.asset(
+            'assets/image/gambar01.jpg',
+            fit: BoxFit.cover,
+            width: 1000.0,
+          ),
+        ),
+      ),
+    ];
+
     return Scaffold(
       body: Column(
         children: [
@@ -39,18 +95,6 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.only(top: 14, left: 16, right: 16),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Gemar Baca',
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                        ),
-                      ),
-                      Spacer(),
-                    ],
-                  ),
                 ),
                 SizedBox(height: 10),
                 Padding(
@@ -72,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                             style: TextStyle(color: Colors.black),
                             decoration: InputDecoration(
                               contentPadding: EdgeInsets.only(bottom: 9),
-                              hintText: 'Search...',
+                              hintText: 'search..',
                               hintStyle: TextStyle(color: Colors.grey),
                               border: InputBorder.none,
                             ),
@@ -80,43 +124,32 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
+
                   ),
                 ),
               ],
             ),
           ),
           SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Container(
-              width: 400,
-              height: 180,
-              decoration: ShapeDecoration(
-                color: Color(0xFFD9D9D9),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
-            ),
-          ),
+
+          SizedBox(height: 30),
           CarouselSlider(
             options: CarouselOptions(
               autoPlay: true,
-              height: 200,
+              height: 150,
               autoPlayCurve: Curves.fastOutSlowIn,
               autoPlayAnimationDuration: const Duration(milliseconds: 800),
               autoPlayInterval: const Duration(seconds: 2),
               enlargeCenterPage: true,
               aspectRatio: 2.0,
               onPageChanged: (index, reason) {
-                setState(() {
-                  myCurrentIndex = index;
-                });
+                controller.updateCurrentIndex(index);
               },
             ),
             items: myitems,
           ),
-          AnimatedSmoothIndicator(activeIndex: myCurrentIndex,
+          Obx(() => AnimatedSmoothIndicator(
+            activeIndex: controller.currentIndex.value,
             count: myitems.length,
             effect: WormEffect(
               dotHeight: 8,
@@ -125,7 +158,10 @@ class _HomePageState extends State<HomePage> {
               dotColor: Colors.grey.shade200,
               activeDotColor: Colors.grey.shade900,
               paintStyle: PaintingStyle.fill,
-            ),)
+            ),
+          )),
+          SizedBox(height: 30),
+          Container(),
         ],
       ),
     );
