@@ -8,6 +8,7 @@ abstract class Routes {
   static const HOME = _Paths.HOME;
   static const SPLASH = _Paths.SPLASH;
   static const ADD_PEMINJAMAN = _Paths.ADD_PEMINJAMAN;
+  static const DETAIL_BUKU = _Paths.DETAIL_BUKU;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const HOME = '/home';
   static const SPLASH = '/splash';
   static const ADD_PEMINJAMAN = '/add-peminjaman';
+  static const DETAIL_BUKU = '/detail-buku';
 }

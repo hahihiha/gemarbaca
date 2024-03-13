@@ -134,8 +134,6 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
           SizedBox(height: 30),
-
-          SizedBox(height: 30),
           CarouselSlider(
             options: CarouselOptions(
               autoPlay: true,
@@ -164,36 +162,43 @@ class HomeView extends GetView<HomeController> {
             ),
           )),
           SizedBox(height: 30),
-          controller.obx(
-                  (state) => ListView.separated(
-                itemCount: state!.length,
-                itemBuilder: (context, index) {
-                  DataBuku dataBuku = state[index];
-                  return ListTile(
-                    title: Text("${dataBuku.judul}"),
-                    subtitle: Text(
-                        "Penulis ${dataBuku.penulis}\n${dataBuku.penerbit} - ${dataBuku.tahunTerbit}"),
-                    trailing: ElevatedButton(
-                      onPressed: () => Get.toNamed(Routes.ADD_PEMINJAMAN,
+          Expanded(
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: controller.obx(
+                    (state) => ListView.separated(
+                  itemCount: state!.length,
+                  itemBuilder: (context, index) {
+                    DataBuku dataBuku = state[index];
+                    return Container(
+                      child: InkWell(
+                        onTap: () => Get.toNamed(
+                          Routes.DETAIL_BUKU,
                           parameters: {
                             'id': (dataBuku.id ?? 0).toString(),
-                            'judul': dataBuku.judul ?? '-'
-                          }),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0CBD63),
-                      ),
-                      child: Text(
-                        "Pinjam",
-                        style: TextStyle(
-                          color: Colors.white,
+                            'judul': dataBuku.judul ?? '-',
+                            'penulis': dataBuku.penulis ?? '-',
+                            'penerbit': dataBuku.penerbit ?? '-',
+                            'tahun_terbit': dataBuku.tahunTerbit.toString() ?? '-',
+                            'deskripsi': dataBuku.deskripsi ?? '-',
+                          },
+                        ),
+                        child: ListTile(
+                          title: Text("${dataBuku.judul}"),
+                          subtitle: Text(
+                            "Penulis ${dataBuku.penulis}\n${dataBuku.penerbit} - ${dataBuku.tahunTerbit}",
+                          ),
+                          trailing: Icon(Icons.arrow_forward),
                         ),
                       ),
-                    ),
-                  );
-                },
-                separatorBuilder: (context, index) => Divider(),
+                    );
+                  },
+                  separatorBuilder: (context, index) => Divider(),
+                ),
+                onLoading: Center(child: CupertinoActivityIndicator()),
               ),
-              onLoading: Center(child: CupertinoActivityIndicator())),
+            ),
+          ),
         ],
       ),
     );

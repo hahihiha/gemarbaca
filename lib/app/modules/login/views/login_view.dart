@@ -120,14 +120,6 @@ class LoginView extends GetView<LoginController> {
                                   border: InputBorder.none,
                                   hintText: "password",
                                   hintStyle: TextStyle(color: Colors.grey[700]),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      _obscureText ? Icons.visibility : Icons.visibility_off,
-                                      color: Colors.grey,
-                                    ),
-                                    onPressed: () {
-                                    },
-                                  ),
                                 ),
                               ),
                             ),
@@ -174,23 +166,7 @@ class LoginView extends GetView<LoginController> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10, ),
-                      FadeInUp(
-                        duration: const Duration(milliseconds: 2000),
-                        child: RichText(
-                          text: TextSpan(
-                            text: "Forgot Password?",
-                            style: const TextStyle(
-                                color: Color(0xFF0CBD63)
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Get.toNamed(Routes.REGISTER);
-                              },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 40,),
+                      const SizedBox(height: 50),
                       FadeInUp(
                         duration: const Duration(milliseconds: 2000),
                         child: RichText(
