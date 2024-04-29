@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart' as dio;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:path/path.dart' as p;
+
 import '../../../data/constant/endpoint.dart';
-import '../../../data/provider/api_provider.dart';
-import '../../../routes/app_pages.dart';
 
 class RegisterController extends GetxController {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final TextEditingController namaController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController notelpController = TextEditingController();
@@ -15,6 +16,9 @@ class RegisterController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final loading = false.obs;
   final count = 0.obs;
+
+  var selectedImage = Rxn<File>();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void onInit() {
@@ -29,46 +33,77 @@ class RegisterController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+    namaController.dispose();
+    usernameController.dispose();
+    notelpController.dispose();
+    alamatController.dispose();
+    passwordController.dispose();
   }
 
-
-  addacount() async {
-    loading(true);
+  // Fungsi untuk memilih gambar
+  Future<void> pickImageFromGallery() async {
     try {
-      FocusScope.of(Get.context!).unfocus(); //nge close keyboard
-      formKey.currentState?.save();
-      if (formKey.currentState!.validate()) {
-        final response = await ApiProvider.instance().post(Endpoint.register,
-            data: {
-              "nama": namaController.text.toString(),
-              "username": usernameController.text.toString(),
-              "telp": int.parse(notelpController.text.toString()),
-              "alamat": alamatController.text.toString(),
-              "password": passwordController.text.toString(),
-            });
-        if (response.statusCode == 201) {
-          Get.toNamed(Routes.LOGIN);
-          Get.snackbar("Berhasil", "Akun berhasil di daftarkan", backgroundColor: Colors.green);
-        } else {
-          Get.snackbar("Sorry", "Registrasi Gagal", backgroundColor: Colors.orange);
-        }
-      }
-      loading(false);
-    } on dio.DioException catch (e) {
-      loading(false);
-      if (e.response != null) {
-        if (e.response?.data != null) {
-          Get.snackbar("Sorry", "${e.response?.data['message']}",
-              backgroundColor: Colors.orange);
-        }
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        selectedImage.value = File(pickedFile.path);  // Menyimpan file gambar yang dipilih
       } else {
-        Get.snackbar("Sorry", e.message ?? "", backgroundColor: Colors.red);
+        print('No image selected.');
       }
     } catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future<void> daftar() async {
+    loading(true);
+    try {
+      FocusScope.of(Get.context!).unfocus();
+
+      if (formKey.currentState!.validate()) {
+        formKey.currentState!.save();
+
+        // Properly declaring a map to hold dynamic values
+        var map = <String, dynamic>{
+          "nama": namaController.text,
+          "username": usernameController.text,
+          "telp": notelpController.text,
+          "alamat": alamatController.text,
+          "password": passwordController.text,
+        };
+
+        if (selectedImage.value != null) {
+          String filePath = selectedImage.value!.path;
+          String fileName = p.basename(filePath);
+
+          // Adding MultipartFile correctly
+          map["image"] = await dio.MultipartFile.fromFile(filePath, filename: fileName);
+        }
+
+        // Constructing FormData with the dynamic map
+        var formData = dio.FormData.fromMap(map);
+
+        final response = await dio.Dio().post(
+          Endpoint.register,
+          data: formData,
+        );
+
+        if (response.statusCode == 201) {
+          Get.back();
+          Get.snackbar("Berhasil", "Petugas berhasil di daftarkan", backgroundColor: Colors.green);
+        } else {
+          Get.snackbar("Error", "Pendaftaran Akun Petugas Gagal with Status: ${response.statusCode}", backgroundColor: Colors.red);
+        }
+      }
+    } on dio.DioException catch (e) {
+      Get.snackbar("Error", "Dio Error: ${e.message}", backgroundColor: Colors.red);
+    } catch (e, stacktrace) {
+      print(stacktrace);
+      Get.snackbar("Error", "Exception: ${e.toString()}", backgroundColor: Colors.red);
+    } finally {
       loading(false);
-      Get.snackbar("Sorry", e.toString(), backgroundColor: Colors.red);
     }
   }
 
 
+  void increment() => count.value++;
 }

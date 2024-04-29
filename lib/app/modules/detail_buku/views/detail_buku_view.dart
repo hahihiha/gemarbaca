@@ -49,7 +49,7 @@ class DetailBukuView extends GetView<DetailBukuController> {
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 4,
+                      flex: 3,
                       child: CachedNetworkImage(
                         imageUrl: imageUrl ?? '',
                         placeholder: (context, url) => CircularProgressIndicator(),
